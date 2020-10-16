@@ -1,0 +1,12 @@
+{
+  "prettier.disableLanguages": [
+    "js",
+    "javascript",
+    "javascriptreact",
+  ],
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+}
