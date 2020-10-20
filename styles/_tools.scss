@@ -1,1 +1,22 @@
-$color: red;
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+// Functions
+@function space($nr: 1) {
+  @return $nr * 8px;
+}
+
+// Fonts
+@mixin fontNanumGothicRegular {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 400;
+}
+
+@mixin fontNanumGothicBold {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 700;
+}
+
+@mixin fontNanumGothicBlack {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 900;
+}

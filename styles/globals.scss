@@ -8,13 +8,25 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, 'Helvetica Neue', sans-serif;
   color: #333;
+  @include fontNanumGothicRegular;
+}
+
+html {
+  font-size: 62.5%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-size: 1.8rem;
+  background-color: #4158d0;
+  background-image: linear-gradient(315deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: blue;
 }
 
 img {
@@ -29,4 +41,8 @@ h3 {
 
 button {
   cursor: pointer;
+}
+
+input {
+  color: #333;
 }

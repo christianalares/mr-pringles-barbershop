@@ -4,6 +4,7 @@
   "rules": {
     "string-quotes": "single",
     "value-list-comma-newline-after": "never-multi-line",
-    "comment-empty-line-before": "always"
+    "comment-empty-line-before": "always",
+    "at-rule-empty-line-before": "never"
   }
 }
