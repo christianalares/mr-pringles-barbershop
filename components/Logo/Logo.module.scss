@@ -1,0 +1,16 @@
+@import '../../styles/tools';
+
+.logo {
+  text-align: center;
+  color: $color1;
+  border: 2px solid $color1;
+  background: $color5;
+  font-size: clamp(1.2rem, 3vw, 3rem);
+  width: 8em;
+  height: 8em;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(-15deg);
+}

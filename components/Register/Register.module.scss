@@ -1,3 +1,29 @@
+@import '../../styles/tools';
+
 .register {
-  border: 1px solid gold;
+  margin: 0 auto;
+  width: auto;
+  max-width: 500px;
+
+  h2 {
+    margin-bottom: space(1);
+  }
+
+  .formGroup {
+    +.formGroup {
+      margin-top: space(2);
+    }
+  }
+
+  .errorMessage {
+    margin-top: space(3);
+  }
+
+  button {
+    margin-top: space(3);
+  }
+
+  .registerText {
+    margin-top: space(3);
+  }
 }

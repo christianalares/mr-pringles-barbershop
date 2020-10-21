@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
         <title>Kismo Motors</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AuthProvider>
+      <AuthProvider userFromServer={pageProps.user}>
         <Component {...pageProps} />
       </AuthProvider>
     </>

@@ -1,10 +1,11 @@
+import Logo from '../Logo/Logo'
 import styles from './Layout.module.scss'
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className={styles.layout}>
       <header>
-        <h1>Kismo Motors</h1>
+        <Logo />
       </header>
       <main className={styles.main}>{children}</main>
     </div>

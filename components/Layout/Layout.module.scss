@@ -1,3 +1,13 @@
-.main {
-  margin: 0 5%;
+@import '../../styles/tools';
+
+.layout {
+  header {
+    display: flex;
+    justify-content: center;
+    padding: clamp(#{space(1)}, 4vw, #{space(4)}) 0;
+  }
+
+  main {
+    margin: 0 5%;
+  }
 }

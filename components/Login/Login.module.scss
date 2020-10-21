@@ -1,17 +1,12 @@
 @import '../../styles/tools';
 
 .login {
-  margin: 100px auto 0 auto;
+  margin: 0 auto;
   width: auto;
   max-width: 500px;
-  border: 1px solid #f0f0f0;
-  padding: space(2);
-  border-radius: space(2);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background: white;
 
   h2 {
-    margin-bottom: space(1);
+    margin-bottom: space(3);
   }
 
   .formGroup {
@@ -20,7 +15,15 @@
     }
   }
 
+  .errorMessage {
+    margin-top: space(3);
+  }
+
   button {
-    margin-top: space(2);
+    margin-top: space(3);
+  }
+
+  .registerText {
+    margin-top: space(3);
   }
 }

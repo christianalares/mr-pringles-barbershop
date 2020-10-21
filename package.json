@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "clsx": "^1.1.1",
     "firebase": "^7.24.0",
     "firebase-admin": "^9.2.0",
+    "framer-motion": "^2.9.4",
     "next": "9.5.5",
     "nookies": "^2.4.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
+    "react-icons": "^3.11.0",
     "react-query": "^2.23.1",
     "sass": "^1.27.0"
   },

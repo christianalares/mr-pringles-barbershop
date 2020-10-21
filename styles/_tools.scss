@@ -5,17 +5,21 @@
   @return $nr * 8px;
 }
 
+$color1: #212637;
+$color2: #414c74;
+$color3: #72adc6;
+$color4: #ea638c;
+$color5: #e6af2e;
+
 // Fonts
 @mixin fontNanumGothicRegular {
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 400;
 }
-
 @mixin fontNanumGothicBold {
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 700;
 }
-
 @mixin fontNanumGothicBlack {
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 900;

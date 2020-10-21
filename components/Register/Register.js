@@ -1,37 +1,44 @@
 import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
-import styles from './Register.module.scss'
+import Card from '../Card/Card'
 import useAuth from '../../utils/hooks/useAuth'
+import Label from '../Label/Label'
+import Input from '../Input/Input'
+import Button from '../Button/Button'
+import Error from '../Error/Error'
+import styles from './Register.module.scss'
 
 const Register = () => {
   const nameRef = useRef()
-  const { register } = useAuth()
+  const { register, status, error, setStatus } = useAuth()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [error, setError] = useState(null)
+  const [clientError, setClientError] = useState(null)
 
   useEffect(() => {
     nameRef.current.focus()
+    setStatus(null)
   }, [])
 
   const handleSubmit = async e => {
     e.preventDefault()
+    setClientError(null)
     if (password !== passwordConfirm) {
-      setError("The password doesn't match")
+      setClientError("The password doesn't match")
     } else {
       register(name, email, password)
     }
   }
 
   return (
-    <div className={styles.register}>
+    <Card className={styles.register}>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
+        <div className={styles.formGroup}>
+          <Label htmlFor="name">Name:</Label>
+          <Input
             type="text"
             name="name"
             id="name"
@@ -41,9 +48,9 @@ const Register = () => {
           />
         </div>
 
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
+        <div className={styles.formGroup}>
+          <Label htmlFor="email">Email:</Label>
+          <Input
             type="email"
             name="email"
             id="email"
@@ -52,9 +59,9 @@ const Register = () => {
           />
         </div>
 
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+        <div className={styles.formGroup}>
+          <Label htmlFor="password">Password:</Label>
+          <Input
             type="password"
             name="password"
             id="password"
@@ -63,9 +70,9 @@ const Register = () => {
           />
         </div>
 
-        <div>
-          <label htmlFor="password">Confirm password:</label>
-          <input
+        <div className={styles.formGroup}>
+          <Label htmlFor="password">Confirm password:</Label>
+          <Input
             type="password"
             name="passwordConfirm"
             id="passwordConfirm"
@@ -74,15 +81,16 @@ const Register = () => {
           />
         </div>
 
-        <button type="submit" disabled={false}>
-          Register
-        </button>
+        <Button type="submit" disabled={status === 'loading'}>
+          {status === 'loading' ? 'Thinking...' : 'Register'}
+        </Button>
       </form>
-      {error && <p>{error}</p>}
-      <p>
+      <Error show={!!clientError} className={styles.errorMessage} message={clientError} />
+      <Error show={status === 'error'} className={styles.errorMessage} message={error} />
+      <p className={styles.registerText}>
         Already have an account? <Link href="/">Login</Link>.
       </p>
-    </div>
+    </Card>
   )
 }
 

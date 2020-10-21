@@ -4,54 +4,82 @@ import firebaseClient from '../config/firebaseClient'
 
 export const authContext = createContext()
 
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [status, setStatus] = useState('loading')
+const AuthProvider = ({ userFromServer, children }) => {
+  const [user, setUser] = useState(
+    userFromServer
+      ? {
+          uid: userFromServer.uid,
+          name: userFromServer.name,
+          email: userFromServer.email,
+        }
+      : null
+  )
+  const [status, setStatus] = useState(userFromServer ? 'success' : 'idle')
+  const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const unsubscribe = firebaseClient.auth().onIdTokenChanged(async firebaseUser => {
-      setStatus('loading')
-      if (!firebaseUser) {
+  const onAuthStateChange = () => {
+    firebaseClient.auth().onIdTokenChanged(async (firebaseUser, err) => {
+      if (err) {
+        setStatus('error')
+        setError(err.message)
         setUser(null)
-        setStatus('idle')
-        nookies.set(undefined, 'token', '')
         return
       }
 
-      const token = await firebaseUser.getIdToken()
+      if (!firebaseUser) {
+        nookies.set(null, 'token', '')
+        setUser(null)
+        setError(null)
+        setStatus('idle')
+      } else {
+        const token = await firebaseUser.getIdToken()
+        nookies.set(null, 'token', token)
 
-      setUser({
-        uid: firebaseUser.uid,
-        name: firebaseUser.displayName,
-        email: firebaseUser.email,
-      })
-      setStatus('success')
-
-      nookies.set(undefined, 'token', token)
+        setUser({
+          uid: firebaseUser.uid,
+          name: firebaseUser.displayName,
+          email: firebaseUser.email,
+        })
+        setStatus('success')
+        setError(null)
+      }
     })
+  }
 
-    return () => unsubscribe()
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange()
+
+    return () => {
+      unsubscribe()
+    }
   }, [])
 
   const login = (email, password) => {
+    setStatus('loading')
     return firebaseClient
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(res => {
-        return res
-      })
-      .catch(error => {
-        return error
+      .then(res => res)
+      .catch(err => {
+        setError(err.message)
+        setStatus('error')
+        return err
       })
   }
 
   const register = async (name, email, password) => {
+    setStatus('loading')
+    setError(null)
+
     try {
       const newUser = await firebaseClient.auth().createUserWithEmailAndPassword(email, password)
       await newUser.user.updateProfile({
         displayName: name,
       })
-    } catch (error) {}
+    } catch (err) {
+      setStatus('error')
+      setError(err.message)
+    }
   }
 
   const logout = () => {
@@ -59,8 +87,9 @@ const AuthProvider = ({ children }) => {
       .auth()
       .signOut()
       .then(() => {})
-      .catch(error => {
-        return error
+      .catch(err => {
+        /* eslint-disable-next-line no-console */
+        console.error('There was an error trying to log out', err.message)
       })
   }
 
@@ -69,6 +98,8 @@ const AuthProvider = ({ children }) => {
       value={{
         user,
         status,
+        error,
+        setStatus,
         register,
         login,
         logout,
