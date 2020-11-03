@@ -1,6 +1,7 @@
 import nookies from 'nookies'
 import firebaseAdmin from '../config/firebaseAdmin'
 import useAuth from '../utils/hooks/useAuth'
+import CutSessionsProvider from '../providers/CutSessionsProvider'
 import Layout from '../components/Layout/Layout'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Login from '../components/Login/Login'
@@ -13,7 +14,11 @@ const HomePage = () => {
       return <Login />
     }
     if (user) {
-      return <Dashboard />
+      return (
+        <CutSessionsProvider>
+          <Dashboard />
+        </CutSessionsProvider>
+      )
     }
 
     return null

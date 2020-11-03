@@ -2,10 +2,14 @@ import styles from './Logo.module.scss'
 
 const Logo = () => {
   return (
-    <h1 className={styles.logo}>
-      Mr. Pringles
-      <br /> Barbershop
-    </h1>
+    <>
+      <h1 className={styles.logo}>
+        <span>
+          Mr. Pringles
+          <br /> Barbershop
+        </span>
+      </h1>
+    </>
   )
 }
 

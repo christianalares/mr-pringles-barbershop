@@ -1,6 +1,6 @@
 import nookies from 'nookies'
 import { createContext, useState, useEffect } from 'react'
-import firebaseClient from '../config/firebaseClient'
+import firebaseApp from '../config/firebaseClient'
 
 export const authContext = createContext()
 
@@ -18,7 +18,7 @@ const AuthProvider = ({ userFromServer, children }) => {
   const [error, setError] = useState(null)
 
   const onAuthStateChange = () => {
-    firebaseClient.auth().onIdTokenChanged(async (firebaseUser, err) => {
+    return firebaseApp.auth().onIdTokenChanged(async (firebaseUser, err) => {
       if (err) {
         setStatus('error')
         setError(err.message)
@@ -56,7 +56,7 @@ const AuthProvider = ({ userFromServer, children }) => {
 
   const login = (email, password) => {
     setStatus('loading')
-    return firebaseClient
+    return firebaseApp
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(res => res)
@@ -72,7 +72,7 @@ const AuthProvider = ({ userFromServer, children }) => {
     setError(null)
 
     try {
-      const newUser = await firebaseClient.auth().createUserWithEmailAndPassword(email, password)
+      const newUser = await firebaseApp.auth().createUserWithEmailAndPassword(email, password)
       await newUser.user.updateProfile({
         displayName: name,
       })
@@ -83,7 +83,7 @@ const AuthProvider = ({ userFromServer, children }) => {
   }
 
   const logout = () => {
-    firebaseClient
+    firebaseApp
       .auth()
       .signOut()
       .then(() => {})
