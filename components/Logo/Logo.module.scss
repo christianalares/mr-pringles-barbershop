@@ -1,23 +1,23 @@
 @import '../../styles/tools';
 
 .logo {
-  text-align: center;
-  border: 2px solid $color1;
-  background: transparent url('./mrpringles-face.png') left top no-repeat;
-  background-size: cover;
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  width: 5.5em;
-  height: 5.5em;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
+  // text-align: center;
+  // border: 2px solid $color1;
+  // background: transparent url('./mrpringles-face.png') left top no-repeat;
+  // background-size: cover;
+  // font-size: clamp(2.2rem, 6vw, 4rem);
+  // width: 2em;
+  // height: 2em;
+  // border-radius: 50%;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
 
-  span {
-    color: $color5;
-    transform: rotate(-15deg);
-    text-shadow: 4px 4px 8px black;
-    @include fontCaveatBold;
-  }
+  // span {
+  //   color: $color5;
+  //   transform: rotate(-15deg);
+  //   text-shadow: 4px 4px 8px black;
+  //   @include fontCaveatBold;
+  // }
 }
