@@ -24,11 +24,10 @@ const CutSessionsProvider = ({ children }) => {
         querySnapshot => {
           const s = []
           querySnapshot.forEach(doc => {
-            console.log(doc)
             s.push({
               ...doc.data(),
               id: doc.id,
-              day: formatDate(doc.data().day.toDate()),
+              date: formatDate(doc.data().date.toDate()),
             })
           })
           setSessions(s)

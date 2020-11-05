@@ -6,6 +6,6 @@
   display: block;
   width: 100%;
   border-radius: space(1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+  border: 1px solid $alto;
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.05);
 }

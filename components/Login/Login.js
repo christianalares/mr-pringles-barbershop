@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { BiLogIn } from 'react-icons/bi'
 import Link from 'next/link'
 import useAuth from '../../utils/hooks/useAuth'
 import Card from '../Card/Card'
@@ -57,14 +58,15 @@ const Login = () => {
             onChange={e => setPassword(e.target.value)}
           />
         </div>
-        <Button type="submit" disabled={status === 'loading'}>
-          {status === 'loading' ? 'Thinking...' : 'Login'}
+        <Button type="submit" icon={BiLogIn} loading={status === 'loading'}>
+          Login
         </Button>
       </form>
       <Error show={status === 'error'} className={styles.errorMessage} message={error} />
       <p className={styles.registerText}>
         Don&apos;t have an account? <Link href="/register">Register</Link>.
       </p>
+      <Link href="/add">Add</Link>
     </Card>
   )
 }

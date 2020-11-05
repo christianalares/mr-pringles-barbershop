@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import { BiUserPlus } from 'react-icons/bi'
 import Link from 'next/link'
 import Card from '../Card/Card'
 import useAuth from '../../utils/hooks/useAuth'
@@ -81,8 +82,8 @@ const Register = () => {
           />
         </div>
 
-        <Button type="submit" disabled={status === 'loading'}>
-          {status === 'loading' ? 'Thinking...' : 'Register'}
+        <Button type="submit" icon={BiUserPlus} loading={status === 'loading'}>
+          Register
         </Button>
       </form>
       <Error show={!!clientError} className={styles.errorMessage} message={clientError} />

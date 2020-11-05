@@ -3,6 +3,7 @@ import useAuth from '../../utils/hooks/useAuth'
 import Card from '../Card/Card'
 import CutSessions from '../CutSessions/CutSessions'
 import styles from './Dashboard.module.scss'
+import Button from '../Button/Button'
 
 const Dashboard = () => {
   const { user, logout } = useAuth()
@@ -10,9 +11,16 @@ const Dashboard = () => {
   return (
     <Card className={styles.dashboard}>
       <h2>Howdy, {user.name} 🤪</h2>
-      <button className={styles.logoutButton} type="button" onClick={logout}>
-        <BiLogOut />
-      </button>
+      <Button
+        type="button"
+        className={styles.logoutButton}
+        size="s"
+        secondary
+        icon={BiLogOut}
+        onClick={logout}
+      >
+        Logout
+      </Button>
       <CutSessions />
     </Card>
   )

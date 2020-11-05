@@ -5,15 +5,31 @@
   @return $nr * 8px;
 }
 
-$color1: #212637;
-$color2: #414c74;
-$color3: #72adc6;
-$color4: #ea638c;
-$color5: #e6af2e;
+$gallery: #eaeaea;
+$alto: #cfcfcf;
+$mineShaft: #333;
+$heavyMetal: #212121;
+$deepBlush: #ea638c;
+$tulipTree: #e6af2e;
 
 $headerHeight: 100px;
 
+// MQs
+@mixin mq-600 {
+  @media (min-width: #{600/16 + 0em}) {
+    @content;
+  }
+}
+
 // Fonts
+@font-face {
+  font-family: 'CharlynRushmoor';
+  src: url('/fonts/Charlynrushmoor.woff2') format('woff2'), url('/fonts/Charlynrushmoor.woff') format('woff'), url('/fonts/Charlynrushmoor.ttf') format('truetype');
+}
+@mixin fontCharlynRushmoor {
+  font-family: 'CharlynRushmoor', cursive;
+  font-weight: 100;
+}
 @mixin fontNanumGothicRegular {
   font-family: 'Nanum Gothic', sans-serif;
   font-weight: 400;
