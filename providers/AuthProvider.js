@@ -76,6 +76,8 @@ const AuthProvider = ({ userFromServer, children }) => {
       await newUser.user.updateProfile({
         displayName: name,
       })
+      // In order to trigger onIdTokenChanged so the state will also get the name (displayName)
+      await firebaseApp.auth().currentUser.getIdToken(true)
     } catch (err) {
       setStatus('error')
       setError(err.message)

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BiPlusCircle } from 'react-icons/bi'
+import { AnimatePresence, motion } from 'framer-motion'
 import Modal from '../Modal/Modal'
 import useCutSessions from '../../utils/hooks/useCutSessions'
 import AddSessionForm from '../AddSessionForm/AddSessionForm'
@@ -26,6 +27,26 @@ const CutSessions = () => {
 
   return (
     <div className={styles.cutSessions}>
+      <AnimatePresence>
+        {sessions.length > 0 ? (
+          <motion.h2
+            initial={{
+              opacity: 0,
+              height: 0,
+            }}
+            animate={{
+              opacity: 1,
+              height: 'auto',
+            }}
+            exit={{
+              opacity: 0,
+              height: 0,
+            }}
+          >
+            Current sessions
+          </motion.h2>
+        ) : null}
+      </AnimatePresence>
       {sessions.length === 0 ? <p>There are no planned cutting sessions.</p> : <CutSessionList />}
 
       <Button onClick={() => setIsModalOpen(true)} icon={BiPlusCircle}>

@@ -34,9 +34,8 @@ const CutSession = ({ session }) => {
     <li key={session.id} className={styles.cutSession}>
       <h3>
         {new Intl.DateTimeFormat(window.navigator.language, {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
+          weekday: 'short',
+          month: 'short',
           day: 'numeric',
         }).format(date)}
       </h3>

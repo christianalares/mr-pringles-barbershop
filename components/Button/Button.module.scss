@@ -34,7 +34,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: space(1);
+
+    svg {
+      margin-right: space(1);
+    }
+    // gap: space(1);
 
     .spinner {
       path {

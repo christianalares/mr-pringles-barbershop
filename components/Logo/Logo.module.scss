@@ -14,7 +14,7 @@
     max-height: 60%;
   }
 
-  h1 {
+  .logoText {
     color: $tulipTree;
     font-size: clamp(2rem, 8vw, 4.5rem);
     @include fontCharlynRushmoor;

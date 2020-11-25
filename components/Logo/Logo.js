@@ -5,7 +5,7 @@ const Logo = () => {
   return (
     <div className={styles.logo}>
       <img src="/img/mrpringles-face.png" alt="Mr. Pringles Barbershop" />
-      <h1>Mr. Pringles Barbershop</h1>
+      <span className={styles.logoText}>Mr. Pringles Barbershop</span>
     </div>
   )
 }

@@ -2,6 +2,18 @@
 
 .layout {
   main {
-    margin: space(8) 5%;
+    margin: 5%;
+  }
+
+  .logoutButton {
+    position: fixed;
+    bottom: space(2);
+    right: space(2);
+
+    svg {
+      width: 70%;
+      height: 70%;
+      transform: translate(-1px, -1px);
+    }
   }
 }

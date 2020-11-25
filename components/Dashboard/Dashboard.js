@@ -1,28 +1,19 @@
-import { BiLogOut } from 'react-icons/bi'
 import useAuth from '../../utils/hooks/useAuth'
 import Card from '../Card/Card'
 import CutSessions from '../CutSessions/CutSessions'
 import styles from './Dashboard.module.scss'
-import Button from '../Button/Button'
 
 const Dashboard = () => {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
 
   return (
-    <Card className={styles.dashboard}>
-      <h2>Howdy, {user.name} 🤪</h2>
-      <Button
-        type="button"
-        className={styles.logoutButton}
-        size="s"
-        secondary
-        icon={BiLogOut}
-        onClick={logout}
-      >
-        Logout
-      </Button>
-      <CutSessions />
-    </Card>
+    <div className={styles.dashboard}>
+      <h1>Howdy, {user.name} 🤪</h1>
+
+      <Card className={styles.card}>
+        <CutSessions />
+      </Card>
+    </div>
   )
 }
 
