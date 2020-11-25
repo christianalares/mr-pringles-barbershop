@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Kismo Motors</title>
+        <title>Mr Pringles Barbershop</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AuthProvider userFromServer={pageProps.user}>

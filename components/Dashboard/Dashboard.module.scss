@@ -5,33 +5,16 @@
   max-width: 1000px;
   margin: 0 auto;
 
-  // .logoutButton {
-  //   position: absolute;
-  //   top: space(2);
-  //   right: space(2);
-  //   width: space(6);
-  //   height: space(6);
-  //   padding: space(1);
-  //   border-radius: 50%;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   border: none;
+  h2 {
+    max-width: calc(100% - 127px);
+  }
 
-  //   svg {
-  //     // color: white;
-  //     width: 70%;
-  //     height: 70%;
-  //     transform: translate(-1px, -1px);
-  //   }
-  // }
   .logoutButton {
     position: absolute;
     top: space(2);
     right: space(2);
 
     svg {
-      // color: white;
       width: 70%;
       height: 70%;
       transform: translate(-1px, -1px);

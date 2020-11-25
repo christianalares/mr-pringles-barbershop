@@ -5,6 +5,7 @@ import useCutSessions from '../../utils/hooks/useCutSessions'
 import AddSessionForm from '../AddSessionForm/AddSessionForm'
 import Button from '../Button/Button'
 import Error from '../Error/Error'
+import CutSessionList from '../CutSessionList/CutSessionList'
 import styles from './CutSessions.module.scss'
 
 const CutSessions = () => {
@@ -15,7 +16,7 @@ const CutSessions = () => {
   }
 
   if (status === 'error') {
-    console.error(error)
+    console.error(error) // eslint-disable-line no-console
     return <Error show message={error.message} className={styles.errorMessage} />
   }
 
@@ -25,17 +26,12 @@ const CutSessions = () => {
 
   return (
     <div className={styles.cutSessions}>
-      {sessions.length === 0 ? <p>There are no planned cutting sessions.</p> : null}
-      <Button onClick={() => setIsModalOpen(true)} icon={BiPlusCircle}>
-        Add a session
-      </Button>
-      <ul>
-        {sessions.map(session => (
-          <li key={session.id}>{session.date}</li>
-        ))}
-      </ul>
+      {sessions.length === 0 ? <p>There are no planned cutting sessions.</p> : <CutSessionList />}
 
-      {/* closeModal={closeModal} */}
+      <Button onClick={() => setIsModalOpen(true)} icon={BiPlusCircle}>
+        Add session
+      </Button>
+
       <Modal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)}>
         <AddSessionForm closeModal={() => setIsModalOpen(false)} />
       </Modal>

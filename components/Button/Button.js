@@ -1,6 +1,7 @@
 /* eslint-disable react/button-has-type */
 import { forwardRef } from 'react'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { motion } from 'framer-motion'
 import cn from 'clsx'
 import styles from './Button.module.scss'
 
@@ -15,11 +16,13 @@ const Button = forwardRef(
       icon,
       disabled,
       type = 'button',
+      animated,
       ...restProps
     },
     ref
   ) => {
     const Icon = icon || null
+    const C = animated ? motion.button : 'button'
 
     const getIcon = () => {
       if (loading) {
@@ -32,10 +35,11 @@ const Button = forwardRef(
     }
 
     return (
-      <button
+      <C
         ref={ref}
         className={cn(styles.button, {
           [className]: !!className,
+          [styles.xsmall]: size === 'xs',
           [styles.small]: size === 's',
           [styles.medium]: size === 'm',
           [styles.secondary]: secondary,
@@ -46,7 +50,7 @@ const Button = forwardRef(
         {...restProps}
       >
         {getIcon()} {children}
-      </button>
+      </C>
     )
   }
 )

@@ -14,25 +14,25 @@
       margin: 0 0 space(2) 0;
 
       li {
-        padding: space(1) 0;
+        overflow: hidden;
         border-bottom: 1px solid $gallery;
-        @include fontNanumGothicBold;
 
-        &:first-child {
-          border-top: 1px solid $gallery;
-        }
+        .inner {
+          padding: space(1) 0;
+          @include fontNanumGothicBold;
 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
 
-        .removeButton {
-          padding: 0;
-          margin: 0 0 -3px 0;
-          font-size: 2.5rem;
-          background: none;
-          border: none;
-          color: $alto;
+          .removeButton {
+            padding: 0;
+            margin: 0 0 -3px 0;
+            font-size: 2.5rem;
+            background: none;
+            border: none;
+            color: $alto;
+          }
         }
       }
     }
@@ -47,6 +47,7 @@
 
     .ctas {
       margin-top: space(2);
+      display: flex;
 
       button + button {
         margin-left: space(1);

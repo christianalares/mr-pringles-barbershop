@@ -48,5 +48,6 @@ module.exports = {
       },
     ],
     'consistent-return': 'off',
+    'no-nested-ternary': 'off',
   },
 }

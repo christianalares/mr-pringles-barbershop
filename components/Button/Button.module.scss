@@ -9,6 +9,11 @@
   color: white;
   @include fontNanumGothicRegular;
 
+  &.xsmall {
+    padding: space(0.5) space(1);
+    font-size: 1.4rem;
+  }
+
   &.small {
     padding: space(1) space(2);
     font-size: 1.6rem;

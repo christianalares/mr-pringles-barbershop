@@ -21,7 +21,7 @@ const Register = () => {
   useEffect(() => {
     nameRef.current.focus()
     setStatus(null)
-  }, [])
+  }, [setStatus])
 
   const handleSubmit = async e => {
     e.preventDefault()

@@ -1,7 +1,6 @@
 import { forwardRef } from 'react'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import enGb from 'date-fns/locale/en-GB'
-import { startOfToday } from 'date-fns'
 import cn from 'clsx'
 import Input from '../Input/Input'
 import styles from './DatePicker.module.scss'

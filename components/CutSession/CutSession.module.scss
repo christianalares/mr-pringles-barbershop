@@ -1,0 +1,97 @@
+@import '../../styles/tools';
+
+.cutSession {
+  border-left: 3px solid $alto;
+  padding-left: space(2);
+
+  +.cutSession {
+    margin-top: space(2);
+  }
+
+  .bookingError {
+    margin-bottom: space(1);
+  }
+
+  h3 {
+    border-bottom: 1px solid $gallery;
+    padding-bottom: space(1);
+    margin-bottom: space(1);
+  }
+
+  .slotList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: space(1) 0;
+
+      .confettiWrapper {
+        position: relative;
+
+        div {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+
+      .time {
+        @include fontNanumGothicBold;
+
+        transition: color 0.3s;
+
+        &.isBooked {
+          color: $alto;
+        }
+      }
+
+      .bookButton,
+      .unbookButton {
+        margin: 0;
+
+        &.bookButton:not([disabled]) {
+          background-color: $emerald;
+        }
+
+        &.unbookButton {
+          background-color: salmon;
+        }
+
+        &:hover {
+          text-shadow: none;
+          color: white;
+          border: 1px solid white;
+
+          &.bookButton:not([disabled]) {
+            background-color: darken($emerald, 10);
+          }
+
+          &.unbookButton {
+            background-color: darken(salmon, 10);
+          }
+        }
+      }
+
+      .booked {
+        border-radius: space(1);
+        background: $gallery;
+        color: $mineShaft;
+        font-size: 1.4rem;
+        padding: space(0.5) space(1);
+        @include fontNanumGothicBold;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+          margin-right: space(1);
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,5 @@
 /* eslint-disable react/button-has-type */
 import { forwardRef } from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import cn from 'clsx'
 import styles from './LinkAsButton.module.scss'
 import buttonStyles from '../Button/Button.module.scss'

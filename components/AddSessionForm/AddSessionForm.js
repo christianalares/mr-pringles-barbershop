@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 import { FiPlus } from 'react-icons/fi'
 import { FaRegTrashAlt } from 'react-icons/fa'
-import { motion } from 'framer-motion'
+import { AiOutlineStop } from 'react-icons/ai'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   set,
   addMinutes,
@@ -17,13 +18,14 @@ import {
 import DatePicker from '../DatePicker/DatePicker'
 import getOneRandomOf from '../../utils/getOneRandomOf'
 import getTimeEmoji from '../../utils/getTimeEmoji'
+import useCutSessions from '../../utils/hooks/useCutSessions'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
 import Emoji from '../Emoji/Emoji'
 import Error from '../Error/Error'
+import ButtonAsLink from '../ButtonAsLink/ButtonAsLink'
 import styles from './AddSessionForm.module.scss'
 import 'react-datepicker/dist/react-datepicker.css'
-import ButtonAsLink from '../ButtonAsLink/ButtonAsLink'
 
 const cutEmojis = ['💇‍♂️', '💇🏻‍♂️', '💇🏼‍♂️', '💇🏽‍♂️', '💇🏾‍♂️', '💇🏿‍♂️']
 
@@ -59,6 +61,8 @@ const getDefaultSlots = () => [
 ]
 
 const AddSessionForm = ({ closeModal }) => {
+  const { add } = useCutSessions()
+
   const validationSchema = yup.object().shape({
     day: yup.string().nullable().required('Hey, you need to set a day!'),
     slots: yup
@@ -73,8 +77,9 @@ const AddSessionForm = ({ closeModal }) => {
       .min(3, 'You need at least 3 slots'),
   })
 
-  const handleSubmit = () => {
-    console.log('submit!')
+  const handleSubmit = async values => {
+    await add(values)
+    closeModal()
   }
 
   return (
@@ -90,28 +95,28 @@ const AddSessionForm = ({ closeModal }) => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {({ values, setFieldValue, errors }) =>
-          console.log('errors', errors) || (
-            <Form>
-              <Field
-                name="day"
-                component={DatePicker}
-                placeholder="Pick a day!"
-                className={styles.datePicker}
-                dateFormat="MMMM d"
-                transformDate={date => format(date, 'yyyy-MM-dd')}
-                minDate={startOfToday(new Date())}
-              />
-              {!values.day ? (
-                <p>
-                  <Emoji label="Finger poining up" symbol="👆" /> First, pick a day.
-                </p>
-              ) : null}
+        {({ values, setFieldValue, isSubmitting }) => (
+          <Form>
+            <Field
+              name="day"
+              component={DatePicker}
+              placeholder="Pick a day!"
+              className={styles.datePicker}
+              dateFormat="MMMM d"
+              transformDate={date => format(date, 'yyyy-MM-dd')}
+              minDate={startOfToday(new Date())}
+            />
+            {!values.day ? (
+              <p>
+                <Emoji label="Finger poining up" symbol="👆" /> First, pick a day.
+              </p>
+            ) : null}
 
-              {values.day && values.slots.length > 0 ? (
-                <FieldArray name="slots">
-                  {arrayHelpers => (
-                    <motion.ul className={styles.timeList} layout>
+            {values.day && values.slots.length > 0 ? (
+              <FieldArray name="slots">
+                {arrayHelpers => (
+                  <motion.ul className={styles.timeList} layout>
+                    <AnimatePresence>
                       {values.slots
                         .sort((a, b) => {
                           const aFrom = getTime(
@@ -134,58 +139,69 @@ const AddSessionForm = ({ closeModal }) => {
 
                           return aFrom - bFrom
                         })
-                        .map((time, i) => {
+                        .map((slot, i) => {
                           return (
-                            <motion.li key={time.from} layout>
-                              <span>{`${getTimeEmoji(time.from)} ${time.from} - ${time.to}`}</span>
-                              <button
-                                type="button"
-                                className={styles.removeButton}
-                                onClick={() => arrayHelpers.remove(i)}
-                                aria-label={`Remove slot ${time.from} to ${time.to}`}
-                              >
-                                <FaRegTrashAlt />
-                              </button>
+                            <motion.li
+                              key={slot.from}
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                            >
+                              <div className={styles.inner}>
+                                <span>{`${getTimeEmoji(slot.from)} ${slot.from} - ${
+                                  slot.to
+                                }`}</span>
+                                <button
+                                  type="button"
+                                  className={styles.removeButton}
+                                  onClick={() => arrayHelpers.remove(i)}
+                                  aria-label={`Remove slot ${slot.from} to ${slot.to}`}
+                                >
+                                  <FaRegTrashAlt />
+                                </button>
+                              </div>
                             </motion.li>
                           )
                         })}
-                    </motion.ul>
-                  )}
-                </FieldArray>
-              ) : null}
+                    </AnimatePresence>
+                  </motion.ul>
+                )}
+              </FieldArray>
+            ) : null}
 
-              {values.slots.length === 0 ? (
-                <p className={styles.addTimeSlotsMessage}>
-                  <Emoji label="Finger poining down" symbol="👇" /> Add some time slots or{' '}
-                  <ButtonAsLink onClick={() => setFieldValue('slots', getDefaultSlots())}>
-                    populate som defaults
-                  </ButtonAsLink>
-                </p>
-              ) : null}
+            {values.slots.length === 0 ? (
+              <p className={styles.addTimeSlotsMessage}>
+                <Emoji label="Finger poining down" symbol="👇" /> Add some time slots or{' '}
+                <ButtonAsLink onClick={() => setFieldValue('slots', getDefaultSlots())}>
+                  populate som defaults
+                </ButtonAsLink>
+              </p>
+            ) : null}
 
-              {values.day ? (
-                <FieldArray name="slots">
-                  {({ push }) => (
-                    <TimePicker addSlot={push} day={values.day} currentSlots={values.slots} />
-                  )}
-                </FieldArray>
-              ) : null}
+            {values.day ? (
+              <FieldArray name="slots">
+                {({ push }) => (
+                  <TimePicker addSlot={push} day={values.day} currentSlots={values.slots} />
+                )}
+              </FieldArray>
+            ) : null}
 
-              <ErrorMessage className={styles.errorMessage} component={Error} name="day" />
-              <ErrorMessage className={styles.errorMessage} component={Error} name="slots" />
+            <ErrorMessage className={styles.errorMessage} component={Error} name="day" />
+            <ErrorMessage className={styles.errorMessage} component={Error} name="slots" />
 
-              {values.day ? (
-                <div className={styles.ctas}>
-                  <Button type="submit">Create session</Button>
-                  <Button secondary type="button" onClick={closeModal}>
-                    Cancel
-                  </Button>
-                </div>
-              ) : null}
-              {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
-            </Form>
-          )
-        }
+            {values.day ? (
+              <div className={styles.ctas}>
+                <Button type="submit" icon={FiPlus} loading={isSubmitting}>
+                  Create
+                </Button>
+                <Button type="button" secondary icon={AiOutlineStop} onClick={closeModal}>
+                  Cancel
+                </Button>
+              </div>
+            ) : null}
+            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+          </Form>
+        )}
       </Formik>
     </div>
   )
@@ -251,72 +267,6 @@ const TimePicker = ({ addSlot, day, currentSlots }) => {
         </Button>
       </div>
 
-      <Error show={!!error} message={error} className={styles.errorMessage} />
-    </div>
-  )
-}
-
-const AddTime = ({ add, day, currentTimes }) => {
-  const [hour, setHour] = useState('')
-  const [minute, setMinute] = useState('')
-  const [error, setError] = useState(null)
-
-  const hourRef = useRef()
-  const minuteRef = useRef()
-  const buttonRef = useRef()
-
-  const handleAdd = () => {
-    const chosenTime = getSlotAt(day, `${hour}:${minute}`)
-
-    const allStartTimes = currentTimes.map(startTime => startTime.from)
-
-    if (allStartTimes.includes(chosenTime.from)) {
-      setError(`${hour}:${minute} is already added`)
-    } else {
-      add(chosenTime)
-      hourRef.current.focus()
-      setHour('')
-      setMinute('')
-      setError(null)
-    }
-  }
-
-  return (
-    <div className={styles.addTimeWrapper}>
-      <div className={styles.formElemenrs}>
-        <div className={styles.hoursMinutes}>
-          <Input
-            ref={hourRef}
-            size="s"
-            type="number"
-            value={hour}
-            onChange={e => {
-              setHour(e.target.value)
-              if (e.target.value.length === 2) {
-                minuteRef.current.focus()
-              }
-            }}
-            placeholder="HH"
-          />
-          <span>:</span>
-          <Input
-            ref={minuteRef}
-            size="s"
-            type="number"
-            value={minute}
-            onChange={e => {
-              setMinute(e.target.value)
-              if (e.target.value.length === 2) {
-                buttonRef.current.focus()
-              }
-            }}
-            placeholder="mm"
-          />
-        </div>
-        <Button ref={buttonRef} icon={FiPlus} secondary size="s" type="button" onClick={handleAdd}>
-          Add
-        </Button>
-      </div>
       <Error show={!!error} message={error} className={styles.errorMessage} />
     </div>
   )
