@@ -1,0 +1,79 @@
+@import '../../styles/tools';
+
+.addSessionForm {
+  form {
+    margin-top: space(2);
+
+    .datePicker {
+      margin-bottom: space(2);
+    }
+
+    .timeList {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 space(2) 0;
+
+      li {
+        padding: space(1) 0;
+        border-bottom: 1px solid $gallery;
+        @include fontNanumGothicBold;
+
+        &:first-child {
+          border-top: 1px solid $gallery;
+        }
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .removeButton {
+          padding: 0;
+          margin: 0 0 -3px 0;
+          font-size: 2.5rem;
+          background: none;
+          border: none;
+          color: $alto;
+        }
+      }
+    }
+
+    .addTimeSlotsMessage {
+      margin-bottom: space(2);
+    }
+
+    .errorMessage {
+      margin-top: space(2);
+    }
+
+    .ctas {
+      margin-top: space(2);
+
+      button + button {
+        margin-left: space(1);
+      }
+    }
+  }
+}
+
+.timePicker {
+  .formElements {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .inputs {
+      flex-basis: 60%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .from {
+        width: calc(50% - #{space(0.5)});
+      }
+
+      .to {
+        width: calc(50% - #{space(0.5)});
+      }
+    }
+  }
+}

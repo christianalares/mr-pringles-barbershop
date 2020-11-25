@@ -1,9 +1,17 @@
+import { Children } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'clsx'
 import styles from './Error.module.scss'
 
-const Error = ({ show = false, className, message, ...restProps }) => {
-  return show ? (
+const Error = ({ show = false, className, message, children, ...restProps }) => {
+  const shouldShowChildren = Children.count(children) > 0
+
+  if (shouldShowChildren && message) {
+    console.error('You cannot use message and children at the same time')
+    return null
+  }
+
+  return show || shouldShowChildren ? (
     <AnimatePresence>
       <motion.span
         initial={{ opacity: 0 }}
@@ -12,7 +20,7 @@ const Error = ({ show = false, className, message, ...restProps }) => {
         className={cn(styles.error, { [className]: !!className })}
         {...restProps}
       >
-        {message}
+        {message || children}
       </motion.span>
     </AnimatePresence>
   ) : null

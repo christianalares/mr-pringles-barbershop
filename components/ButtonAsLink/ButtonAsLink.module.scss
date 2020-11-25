@@ -1,0 +1,16 @@
+@import '../../styles/tools';
+
+.buttonAsLink {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $deepBlush;
+  font-size: 1em;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+
+  &:hover {
+    border-color: $deepBlush;
+  }
+}

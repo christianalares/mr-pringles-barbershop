@@ -66,7 +66,6 @@ const Login = () => {
       <p className={styles.registerText}>
         Don&apos;t have an account? <Link href="/register">Register</Link>.
       </p>
-      <Link href="/add">Add</Link>
     </Card>
   )
 }
