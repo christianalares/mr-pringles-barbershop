@@ -29,6 +29,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 const cutEmojis = ['💇‍♂️', '💇🏻‍♂️', '💇🏼‍♂️', '💇🏽‍♂️', '💇🏾‍♂️', '💇🏿‍♂️']
 
+const slideDownUp = {
+  initial: { opacity: 0, height: 0 },
+  animate: { opacity: 1, height: 'auto' },
+  exit: { opacity: 0, height: 0 },
+}
+
 const getDefaultSlots = () => [
   {
     from: '15:30',
@@ -90,7 +96,7 @@ const AddSessionForm = ({ closeModal }) => {
       <Formik
         initialValues={{
           day: null,
-          slots: getDefaultSlots(),
+          slots: [],
         }}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
@@ -141,12 +147,7 @@ const AddSessionForm = ({ closeModal }) => {
                         })
                         .map((slot, i) => {
                           return (
-                            <motion.li
-                              key={slot.from}
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                            >
+                            <motion.li key={slot.from} {...slideDownUp}>
                               <div className={styles.inner}>
                                 <span>{`${getTimeEmoji(slot.from)} ${slot.from} - ${
                                   slot.to
@@ -169,14 +170,16 @@ const AddSessionForm = ({ closeModal }) => {
               </FieldArray>
             ) : null}
 
-            {values.slots.length === 0 ? (
-              <p className={styles.addTimeSlotsMessage}>
-                <Emoji label="Finger poining down" symbol="👇" /> Add some time slots or{' '}
-                <ButtonAsLink onClick={() => setFieldValue('slots', getDefaultSlots())}>
-                  populate som defaults
-                </ButtonAsLink>
-              </p>
-            ) : null}
+            {values.slots.length === 0 && !!values.day && (
+              <AnimatePresence>
+                <motion.p className={styles.addTimeSlotsMessage} {...slideDownUp}>
+                  <Emoji label="Finger poining down" symbol="👇" /> Add some time slots or{' '}
+                  <ButtonAsLink onClick={() => setFieldValue('slots', getDefaultSlots())}>
+                    populate some defaults
+                  </ButtonAsLink>
+                </motion.p>
+              </AnimatePresence>
+            )}
 
             {values.day ? (
               <FieldArray name="slots">
@@ -199,7 +202,6 @@ const AddSessionForm = ({ closeModal }) => {
                 </Button>
               </div>
             ) : null}
-            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
           </Form>
         )}
       </Formik>

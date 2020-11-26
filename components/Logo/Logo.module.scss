@@ -5,20 +5,19 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  padding: space(1);
 
-  img {
-    border-radius: 50%;
-    border: 3px solid $tulipTree;
-    margin-right: space(1);
-    max-width: 60%;
-    max-height: 60%;
-  }
+  .imageWrapper {
+    height: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .logoText {
-    color: $tulipTree;
-    font-size: clamp(2rem, 8vw, 4.5rem);
-    @include fontCharlynRushmoor;
-
-    margin-left: space(1);
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: space(2);
+    }
   }
 }

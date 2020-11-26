@@ -5,6 +5,7 @@
   @return $nr * 8px;
 }
 
+$alabaster: #fafafa;
 $gallery: #eaeaea;
 $alto: #cfcfcf;
 $mineShaft: #333;
@@ -13,7 +14,7 @@ $deepBlush: #ea638c;
 $tulipTree: #e6af2e;
 $emerald: #3fce66;
 
-$headerHeight: 100px;
+$headerHeight: 150px;
 
 // MQs
 @mixin mq-600 {

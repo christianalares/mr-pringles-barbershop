@@ -1,10 +1,12 @@
+import { BiLogOut } from 'react-icons/bi'
 import useAuth from '../../utils/hooks/useAuth'
 import Card from '../Card/Card'
 import CutSessions from '../CutSessions/CutSessions'
+import Button from '../Button/Button'
 import styles from './Dashboard.module.scss'
 
 const Dashboard = () => {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   return (
     <div className={styles.dashboard}>
@@ -13,6 +15,12 @@ const Dashboard = () => {
       <Card className={styles.card}>
         <CutSessions />
       </Card>
+
+      <div className={styles.bottom}>
+        <Button type="button" size="s" secondary icon={BiLogOut} onClick={logout}>
+          Logout
+        </Button>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 @import '../../styles/tools';
 
 .header {
-  background: black;
+  background: url('/img/dark_leather.png') repeat fixed;
   height: $headerHeight;
+  box-shadow: 0 1px 100px rgba(0, 0, 0, 0.05);
 }

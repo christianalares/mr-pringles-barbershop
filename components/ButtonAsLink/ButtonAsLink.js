@@ -1,9 +1,11 @@
+import { motion } from 'framer-motion'
 import cn from 'clsx'
 import styles from './ButtonAsLink.module.scss'
 
-const ButtonAsLink = ({ children, className, onClick, ...restProps }) => {
+const ButtonAsLink = ({ children, className, onClick, animated, ...restProps }) => {
+  const C = animated ? motion.button : 'button'
   return (
-    <button
+    <C
       type="button"
       className={cn(styles.buttonAsLink, {
         [className]: !!className,
@@ -12,7 +14,7 @@ const ButtonAsLink = ({ children, className, onClick, ...restProps }) => {
       {...restProps}
     >
       {children}
-    </button>
+    </C>
   )
 }
 

@@ -12,4 +12,8 @@
   &.small {
     padding: space(1) space(2);
   }
+
+  [readonly] {
+    color: red;
+  }
 }
