@@ -173,7 +173,7 @@ const AddSessionForm = ({ closeModal }) => {
             {values.slots.length === 0 && !!values.day && (
               <AnimatePresence>
                 <motion.p className={styles.addTimeSlotsMessage} {...slideDownUp}>
-                  <Emoji label="Finger poining down" symbol="👇" /> Add some time slots or{' '}
+                  <Emoji label="Finger poining down" symbol="👇" /> Add slots or{' '}
                   <ButtonAsLink onClick={() => setFieldValue('slots', getDefaultSlots())}>
                     populate some defaults
                   </ButtonAsLink>
@@ -254,12 +254,12 @@ const TimePicker = ({ addSlot, day, currentSlots }) => {
             placeholder="From"
             size="s"
           />
-
+          -
           <Input
             className={styles.to}
             value={timeFrom ? format(addMinutes(timeFrom, 30), 'HH:mm') : ''}
             placeholder="To"
-            readOnly
+            disabled
             size="s"
           />
         </div>

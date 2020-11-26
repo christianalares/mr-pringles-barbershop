@@ -13,7 +13,9 @@
     padding: space(1) space(2);
   }
 
-  [readonly] {
-    color: red;
+  &[disabled] {
+    cursor: not-allowed;
+    outline: none;
+    color: grey;
   }
 }
