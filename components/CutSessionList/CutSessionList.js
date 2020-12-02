@@ -1,13 +1,14 @@
-import useCutSessions from '../../utils/hooks/useCutSessions'
+import useSessions from '../../utils/hooks/useSessions'
 import CutSession from '../CutSession/CutSession'
 import styles from './CutSessionList.module.scss'
 
 const CutSessionList = () => {
-  const { sessions } = useCutSessions()
+  const { sessions } = useSessions()
+  console.log('sessions:', sessions)
   return (
     <ul className={styles.cutSessionList}>
       {sessions.map(s => (
-        <CutSession key={s.id} session={s} />
+        <CutSession key={s.id} cutSession={s} />
       ))}
     </ul>
   )

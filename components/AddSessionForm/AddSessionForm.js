@@ -18,7 +18,7 @@ import {
 import DatePicker from '../DatePicker/DatePicker'
 import getOneRandomOf from '../../utils/getOneRandomOf'
 import getTimeEmoji from '../../utils/getTimeEmoji'
-import useCutSessions from '../../utils/hooks/useCutSessions'
+import useSessions from '../../utils/hooks/useSessions'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
 import Emoji from '../Emoji/Emoji'
@@ -67,7 +67,7 @@ const getDefaultSlots = () => [
 ]
 
 const AddSessionForm = ({ closeModal }) => {
-  const { add } = useCutSessions()
+  const { add } = useSessions()
 
   const validationSchema = yup.object().shape({
     day: yup.string().nullable().required('Hey, you need to set a day!'),

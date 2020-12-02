@@ -4,7 +4,8 @@ import cn from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import Button from '../Button/Button'
 import getTimeEmoji from '../../utils/getTimeEmoji'
-import useCutSessions from '../../utils/hooks/useCutSessions'
+// import useSessions from '../../utils/hooks/useSessions'
+import useSession from '../../utils/hooks/useSession'
 import useAuth from '../../utils/hooks/useAuth'
 import Error from '../Error/Error'
 import styles from './CutSession.module.scss'
@@ -23,10 +24,17 @@ const confettiConfig = {
   colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
 }
 
-const CutSession = ({ session }) => {
-  const date = new Date(session.day)
-  const { book, unbook, bookingError } = useCutSessions()
+const CutSession = ({ cutSession }) => {
+  const sessionDate = new Date(cutSession.day)
+
+  const { status, error, session, book, unbook } = useSession(cutSession.id)
+
   const { user } = useAuth()
+
+  if (status !== 'success') {
+    return null
+  }
+
   const alreadyHaveOneBooked =
     session.slots.filter(slot => slot.bookedBy?.email === user.email).length > 0
 
@@ -37,25 +45,21 @@ const CutSession = ({ session }) => {
           weekday: 'short',
           month: 'short',
           day: 'numeric',
-        }).format(date)}
+        }).format(sessionDate)}
       </h3>
-      <Error
-        show={!!bookingError?.[session.id]}
-        message={bookingError?.[session.id]}
-        className={styles.bookingError}
-      />
+      <Error show={status === 'error'} message={error} className={styles.bookingError} />
       <ul className={styles.slotList}>
         {session.slots.map(slot => {
           const isBooked = !!slot.bookedBy
           const isYourBooking = slot.bookedBy?.email === user.email
 
           return (
-            <li key={slot.from}>
+            <li key={slot.startTime}>
               <span
                 className={cn(styles.time, {
                   [styles.isBooked]: isBooked,
                 })}
-              >{`${getTimeEmoji(slot.from)} ${slot.from} - ${slot.to}`}</span>
+              >{`${getTimeEmoji(slot.startTime)} ${slot.startTime} - ${slot.endTime}`}</span>
               <div>
                 <div className={styles.confettiWrapper}>
                   <Confetti active={isBooked} config={confettiConfig} />
@@ -65,7 +69,7 @@ const CutSession = ({ session }) => {
                     isYourBooking ? (
                       <Button
                         type="button"
-                        onClick={() => unbook(session.id, slot.from)}
+                        onClick={() => unbook(slot.id)}
                         size="xs"
                         className={styles.unbookButton}
                       >
@@ -84,7 +88,7 @@ const CutSession = ({ session }) => {
                   ) : (
                     <Button
                       type="button"
-                      onClick={() => book(session.id, slot.from)}
+                      onClick={() => book(slot.id)}
                       size="xs"
                       className={styles.bookButton}
                       disabled={alreadyHaveOneBooked}

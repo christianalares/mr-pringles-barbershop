@@ -1,7 +1,7 @@
 import nookies from 'nookies'
 import firebaseAdmin from '../config/firebaseAdmin'
 import useAuth from '../utils/hooks/useAuth'
-import CutSessionsProvider from '../providers/CutSessionsProvider'
+import SessionsProvider from '../providers/SessionsProvider'
 import Layout from '../components/Layout/Layout'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Login from '../components/Login/Login'
@@ -9,22 +9,17 @@ import Login from '../components/Login/Login'
 const HomePage = () => {
   const { user } = useAuth()
 
-  const render = () => {
-    if (!user) {
-      return <Login />
-    }
-    if (user) {
-      return (
-        <CutSessionsProvider>
+  return (
+    <Layout>
+      {user ? (
+        <SessionsProvider>
           <Dashboard />
-        </CutSessionsProvider>
-      )
-    }
-
-    return null
-  }
-
-  return <Layout>{render()}</Layout>
+        </SessionsProvider>
+      ) : (
+        <Login />
+      )}
+    </Layout>
+  )
 }
 
 export const getServerSideProps = async ctx => {

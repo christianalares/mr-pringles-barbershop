@@ -2,29 +2,30 @@ import { createContext, useState, useEffect } from 'react'
 import firebaseApp from '../config/firebaseClient'
 import useAuth from '../utils/hooks/useAuth'
 
-export const cutSessionsContext = createContext()
+export const sessionsContext = createContext()
 
-const CutSessionsProvider = ({ children }) => {
+const SessionsProvider = ({ children }) => {
   const [sessions, setSessions] = useState([])
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState(null)
   const [bookingError, setBookingError] = useState(null)
   const { user } = useAuth()
 
-  const onCutSessionsStateChange = () => {
+  const onSessionsStateChange = () => {
     return firebaseApp
       .firestore()
       .collection('sessions')
       .onSnapshot(
-        querySnapshot => {
-          const s = []
-          querySnapshot.forEach(doc => {
-            s.push({
-              ...doc.data(),
+        snapshot => {
+          const tempSessions = []
+          snapshot.forEach(doc => {
+            tempSessions.push({
               id: doc.id,
+              day: doc.data().day,
             })
           })
-          setSessions(s)
+
+          setSessions(tempSessions)
           setStatus('success')
         },
         err => {
@@ -36,10 +37,11 @@ const CutSessionsProvider = ({ children }) => {
 
   useEffect(() => {
     setStatus('loading')
-    const unsubscribe = onCutSessionsStateChange()
+    const unsubscribe = onSessionsStateChange()
 
     return () => {
       unsubscribe()
+      setStatus('idle')
     }
   }, [])
 
@@ -116,7 +118,7 @@ const CutSessionsProvider = ({ children }) => {
   }
 
   return (
-    <cutSessionsContext.Provider
+    <sessionsContext.Provider
       value={{
         sessions,
         bookingError,
@@ -128,8 +130,8 @@ const CutSessionsProvider = ({ children }) => {
       }}
     >
       {children}
-    </cutSessionsContext.Provider>
+    </sessionsContext.Provider>
   )
 }
 
-export default CutSessionsProvider
+export default SessionsProvider
