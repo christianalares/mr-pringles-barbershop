@@ -9,9 +9,8 @@ export const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 }
 
-const firebaseApp =
-  typeof window !== 'undefined' && firebase.apps.length === 0
-    ? firebase.initializeApp(firebaseConfig)
-    : firebase
+const firebaseApp = firebase.apps.length === 0 ? firebase.initializeApp(firebaseConfig) : firebase
+export const db = firebaseApp.firestore()
+export const auth = firebaseApp.auth()
 
 export default firebaseApp

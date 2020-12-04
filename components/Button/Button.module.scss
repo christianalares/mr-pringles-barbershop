@@ -72,6 +72,11 @@
   &[disabled] {
     cursor: not-allowed;
     background: grey;
+
+    &.secondary {
+      background: white;
+      color: grey;
+    }
   }
 }
 @keyframes spinner {

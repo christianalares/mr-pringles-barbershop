@@ -37,32 +37,32 @@ const slideDownUp = {
 
 const getDefaultSlots = () => [
   {
-    from: '15:30',
-    to: '16:00',
+    startTime: '15:30',
+    endTime: '16:00',
   },
   {
-    from: '16:00',
-    to: '16:30',
+    startTime: '16:00',
+    endTime: '16:30',
   },
   {
-    from: '16:30',
-    to: '17:00',
+    startTime: '16:30',
+    endTime: '17:00',
   },
   {
-    from: '17:00',
-    to: '17:30',
+    startTime: '17:00',
+    endTime: '17:30',
   },
   {
-    from: '17:30',
-    to: '18:00',
+    startTime: '17:30',
+    endTime: '18:00',
   },
   {
-    from: '18:00',
-    to: '18:30',
+    startTime: '18:00',
+    endTime: '18:30',
   },
   {
-    from: '18:30',
-    to: '19:00',
+    startTime: '18:30',
+    endTime: '19:00',
   },
 ]
 
@@ -75,17 +75,22 @@ const AddSessionForm = ({ closeModal }) => {
       .array()
       .of(
         yup.object().shape({
-          from: yup.string(),
-          to: yup.string(),
+          startTime: yup.string().required(),
+          endTime: yup.string().required(),
         })
       )
       .required()
       .min(3, 'You need at least 3 slots'),
   })
 
-  const handleSubmit = async values => {
-    await add(values)
-    closeModal()
+  const handleSubmit = async (values, { setFieldError }) => {
+    // Manually checking for empty array, couldn't get `.min(3)` to reject empty array
+    if (values.slots.length === 0) {
+      setFieldError('slots', 'You need at least 3 slots')
+    } else {
+      await add(values)
+      closeModal()
+    }
   }
 
   return (
@@ -127,8 +132,8 @@ const AddSessionForm = ({ closeModal }) => {
                         .sort((a, b) => {
                           const aFrom = getTime(
                             set(new Date(values.day), {
-                              hours: a.from.split(':')[0],
-                              minutes: a.from.split(':')[1],
+                              hours: a.startTime.split(':')[0],
+                              minutes: a.startTime.split(':')[1],
                               seconds: 0,
                               milliseconds: 0,
                             })
@@ -136,8 +141,8 @@ const AddSessionForm = ({ closeModal }) => {
 
                           const bFrom = getTime(
                             set(new Date(values.day), {
-                              hours: b.from.split(':')[0],
-                              minutes: b.from.split(':')[1],
+                              hours: b.startTime.split(':')[0],
+                              minutes: b.startTime.split(':')[1],
                               seconds: 0,
                               milliseconds: 0,
                             })
@@ -147,16 +152,16 @@ const AddSessionForm = ({ closeModal }) => {
                         })
                         .map((slot, i) => {
                           return (
-                            <motion.li key={slot.from} {...slideDownUp}>
+                            <motion.li key={slot.startTime} {...slideDownUp}>
                               <div className={styles.inner}>
-                                <span>{`${getTimeEmoji(slot.from)} ${slot.from} - ${
-                                  slot.to
+                                <span>{`${getTimeEmoji(slot.startTime)} ${slot.startTime} - ${
+                                  slot.endTime
                                 }`}</span>
                                 <button
                                   type="button"
                                   className={styles.removeButton}
                                   onClick={() => arrayHelpers.remove(i)}
-                                  aria-label={`Remove slot ${slot.from} to ${slot.to}`}
+                                  aria-label={`Remove slot ${slot.startTime} to ${slot.endTime}`}
                                 >
                                   <FaRegTrashAlt />
                                 </button>
@@ -210,28 +215,32 @@ const AddSessionForm = ({ closeModal }) => {
 }
 
 const TimePicker = ({ addSlot, day, currentSlots }) => {
-  const [timeFrom, setTimeFrom] = useState(null)
+  const [timeStart, setTimeStart] = useState(null)
   const [error, setError] = useState(null)
 
   const handleAdd = () => {
-    const from = format(timeFrom, 'HH:mm')
-    const to = format(addMinutes(timeFrom, 30), 'HH:mm')
+    if (!timeStart) {
+      return
+    }
 
-    const allStartTimes = currentSlots.map(startTime => startTime.from)
+    const start = format(timeStart, 'HH:mm')
+    const end = format(addMinutes(timeStart, 30), 'HH:mm')
 
-    if (allStartTimes.includes(from)) {
-      setError(`${from} is already added`)
+    const allStartTimes = currentSlots.map(startTime => startTime.startTime)
+
+    if (allStartTimes.includes(start)) {
+      setError(`${start} is already added`)
     } else {
-      addSlot({ from, to })
+      addSlot({ startTime: start, endTime: end })
       setError(null)
-      setTimeFrom(null)
+      setTimeStart(null)
     }
   }
 
   const excludedTimes = currentSlots.map(slot =>
     set(new Date(day), {
-      hours: slot.from.split(':')[0],
-      minutes: slot.from.split(':')[1],
+      hours: slot.startTime.split(':')[0],
+      minutes: slot.startTime.split(':')[1],
       seconds: 0,
       milliseconds: 0,
     })
@@ -243,28 +252,35 @@ const TimePicker = ({ addSlot, day, currentSlots }) => {
         <div className={styles.inputs}>
           <DatePicker
             className={styles.from}
-            selected={timeFrom}
+            selected={timeStart}
             minTime={isToday(new Date(day)) ? new Date() : startOfDay(new Date(day))}
             maxTime={endOfDay(new Date(day))}
             excludeTimes={excludedTimes}
             showTimeSelect
             showTimeSelectOnly
             dateFormat="HH:mm"
-            onChange={date => setTimeFrom(date)}
+            onChange={date => setTimeStart(date)}
             placeholder="From"
             size="s"
           />
           -
           <Input
             className={styles.to}
-            value={timeFrom ? format(addMinutes(timeFrom, 30), 'HH:mm') : ''}
+            value={timeStart ? format(addMinutes(timeStart, 30), 'HH:mm') : ''}
             placeholder="To"
             disabled
             size="s"
           />
         </div>
 
-        <Button icon={FiPlus} type="button" onClick={handleAdd} size="s" secondary>
+        <Button
+          disabled={!timeStart}
+          icon={FiPlus}
+          type="button"
+          onClick={handleAdd}
+          size="s"
+          secondary
+        >
           Add
         </Button>
       </div>

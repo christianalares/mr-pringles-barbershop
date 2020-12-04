@@ -1,6 +1,6 @@
 import nookies from 'nookies'
 import { createContext, useState, useEffect } from 'react'
-import firebaseApp from '../config/firebaseClient'
+import { auth } from '../config/firebaseClient'
 
 export const authContext = createContext()
 
@@ -18,7 +18,7 @@ const AuthProvider = ({ userFromServer, children }) => {
   const [error, setError] = useState(null)
 
   const onAuthStateChange = () => {
-    return firebaseApp.auth().onIdTokenChanged(async (firebaseUser, err) => {
+    return auth.onIdTokenChanged(async (firebaseUser, err) => {
       if (err) {
         setStatus('error')
         setError(err.message)
@@ -56,8 +56,7 @@ const AuthProvider = ({ userFromServer, children }) => {
 
   const login = (email, password) => {
     setStatus('loading')
-    return firebaseApp
-      .auth()
+    return auth
       .signInWithEmailAndPassword(email, password)
       .then(res => res)
       .catch(err => {
@@ -72,12 +71,12 @@ const AuthProvider = ({ userFromServer, children }) => {
     setError(null)
 
     try {
-      const newUser = await firebaseApp.auth().createUserWithEmailAndPassword(email, password)
+      const newUser = await auth.createUserWithEmailAndPassword(email, password)
       await newUser.user.updateProfile({
         displayName: name,
       })
       // In order to trigger onIdTokenChanged so the state will also get the name (displayName)
-      await firebaseApp.auth().currentUser.getIdToken(true)
+      await auth.currentUser.getIdToken(true)
     } catch (err) {
       setStatus('error')
       setError(err.message)
@@ -85,8 +84,7 @@ const AuthProvider = ({ userFromServer, children }) => {
   }
 
   const logout = () => {
-    firebaseApp
-      .auth()
+    auth
       .signOut()
       .then(() => {})
       .catch(err => {

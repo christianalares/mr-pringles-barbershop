@@ -1,17 +1,17 @@
-import { useEffect, useState, useCallback } from 'react'
-import firebaseApp from '../../config/firebaseClient'
+import { useEffect, useState, useCallback, useRef } from 'react'
+import { db } from '../../config/firebaseClient'
 import useAuth from './useAuth'
 
 const useSession = sessionId => {
   const [session, setSession] = useState(null)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState(null)
+  const [bookingError, setBookingError] = useState(null)
   const { user } = useAuth()
+  const { current: sessionRef } = useRef(db.collection('sessions'))
 
   const onSessionStateChange = useCallback(() => {
-    return firebaseApp
-      .firestore()
-      .collection('sessions')
+    return sessionRef
       .doc(sessionId)
       .collection('slots')
       .onSnapshot(
@@ -35,7 +35,7 @@ const useSession = sessionId => {
           setStatus('error')
         }
       )
-  }, [sessionId])
+  }, [sessionId, sessionRef])
 
   useEffect(() => {
     const unsubscribe = onSessionStateChange()
@@ -45,12 +45,25 @@ const useSession = sessionId => {
     }
   }, [onSessionStateChange])
 
-  const book = slotId => {
-    console.log('book', user, slotId)
+  const book = async slotId => {
+    const alreadyHaveOneBooked =
+      session.slots.filter(slot => slot.bookedBy?.email === user.email).length > 0
+
+    if (alreadyHaveOneBooked) {
+      setBookingError('You already have a booked slot')
+    } else {
+      const slotRef = await sessionRef.doc(session.id).collection('slots').doc(slotId)
+      slotRef.update({
+        bookedBy: user,
+      })
+    }
   }
 
-  const unbook = slotId => {
-    console.log('unbook', user, slotId)
+  const unbook = async slotId => {
+    const slotRef = await sessionRef.doc(session.id).collection('slots').doc(slotId)
+    slotRef.update({
+      bookedBy: null,
+    })
   }
 
   return {
@@ -59,6 +72,7 @@ const useSession = sessionId => {
     error,
     book,
     unbook,
+    bookingError,
   }
 }
 

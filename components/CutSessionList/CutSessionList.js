@@ -4,7 +4,6 @@ import styles from './CutSessionList.module.scss'
 
 const CutSessionList = () => {
   const { sessions } = useSessions()
-  console.log('sessions:', sessions)
   return (
     <ul className={styles.cutSessionList}>
       {sessions.map(s => (
