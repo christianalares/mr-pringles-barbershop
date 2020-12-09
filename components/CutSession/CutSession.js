@@ -4,7 +4,6 @@ import cn from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import Button from '../Button/Button'
 import getTimeEmoji from '../../utils/getTimeEmoji'
-// import useSessions from '../../utils/hooks/useSessions'
 import useSession from '../../utils/hooks/useSession'
 import useAuth from '../../utils/hooks/useAuth'
 import Error from '../Error/Error'
@@ -49,7 +48,7 @@ const CutSession = ({ cutSession }) => {
       </h3>
       <Error show={status === 'error'} message={error} className={styles.bookingError} />
       <ul className={styles.slotList}>
-        {session.slots.map(slot => {
+        {session.slots.reverse().map(slot => {
           const isBooked = !!slot.bookedBy
           const isYourBooking = slot.bookedBy?.email === user.email
 
