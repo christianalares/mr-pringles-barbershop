@@ -43,6 +43,7 @@
         @include fontNanumGothicBold;
 
         transition: color 0.3s;
+        flex-basis: 50%;
 
         &.isBooked {
           color: $alto;
@@ -80,7 +81,7 @@
         border-radius: space(1);
         background: $gallery;
         color: $mineShaft;
-        font-size: 1.4rem;
+        font-size: 1.1rem;
         padding: space(0.5) space(1);
         @include fontNanumGothicBold;
 

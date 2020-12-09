@@ -2,6 +2,7 @@ import Confetti from 'react-dom-confetti'
 import { FaLock } from 'react-icons/fa'
 import cn from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
+import { set, getTime } from 'date-fns'
 import Button from '../Button/Button'
 import getTimeEmoji from '../../utils/getTimeEmoji'
 import useSession from '../../utils/hooks/useSession'
@@ -48,62 +49,84 @@ const CutSession = ({ cutSession }) => {
       </h3>
       <Error show={status === 'error'} message={error} className={styles.bookingError} />
       <ul className={styles.slotList}>
-        {session.slots.reverse().map(slot => {
-          const isBooked = !!slot.bookedBy
-          const isYourBooking = slot.bookedBy?.email === user.email
+        {session.slots
+          .sort((a, b) => {
+            const aStart = getTime(
+              set(new Date(sessionDate), {
+                hours: a.startTime.split(':')[0],
+                minutes: a.startTime.split(':')[1],
+                seconds: 0,
+                milliseconds: 0,
+              })
+            )
 
-          return (
-            <li key={slot.startTime}>
-              <span
-                className={cn(styles.time, {
-                  [styles.isBooked]: isBooked,
-                })}
-              >{`${getTimeEmoji(slot.startTime)} ${slot.startTime} - ${slot.endTime}`}</span>
-              <div>
-                <div className={styles.confettiWrapper}>
-                  <Confetti active={isBooked} config={confettiConfig} />
-                </div>
-                <AnimatePresence exitBeforeEnter>
-                  {isBooked ? (
-                    isYourBooking ? (
+            const bStart = getTime(
+              set(new Date(sessionDate), {
+                hours: b.startTime.split(':')[0],
+                minutes: b.startTime.split(':')[1],
+                seconds: 0,
+                milliseconds: 0,
+              })
+            )
+
+            return aStart - bStart
+          })
+          .map(slot => {
+            const isBooked = !!slot.bookedBy
+            const isYourBooking = slot.bookedBy?.email === user.email
+
+            return (
+              <li key={slot.startTime}>
+                <span
+                  className={cn(styles.time, {
+                    [styles.isBooked]: isBooked,
+                  })}
+                >{`${getTimeEmoji(slot.startTime)} ${slot.startTime} - ${slot.endTime}`}</span>
+                <div>
+                  <div className={styles.confettiWrapper}>
+                    <Confetti active={isBooked} config={confettiConfig} />
+                  </div>
+                  <AnimatePresence exitBeforeEnter>
+                    {isBooked ? (
+                      isYourBooking ? (
+                        <Button
+                          type="button"
+                          onClick={() => unbook(slot.id)}
+                          size="xs"
+                          className={styles.unbookButton}
+                        >
+                          Cancel
+                        </Button>
+                      ) : (
+                        <motion.span
+                          className={styles.booked}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                        >
+                          <FaLock /> {slot.bookedBy.name}
+                        </motion.span>
+                      )
+                    ) : (
                       <Button
                         type="button"
-                        onClick={() => unbook(slot.id)}
+                        onClick={() => book(slot.id)}
                         size="xs"
-                        className={styles.unbookButton}
-                      >
-                        Cancel
-                      </Button>
-                    ) : (
-                      <motion.span
-                        className={styles.booked}
+                        className={styles.bookButton}
+                        disabled={alreadyHaveOneBooked}
+                        animated
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
                       >
-                        <FaLock /> {slot.bookedBy.name}
-                      </motion.span>
-                    )
-                  ) : (
-                    <Button
-                      type="button"
-                      onClick={() => book(slot.id)}
-                      size="xs"
-                      className={styles.bookButton}
-                      disabled={alreadyHaveOneBooked}
-                      animated
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                    >
-                      Book
-                    </Button>
-                  )}
-                </AnimatePresence>
-              </div>
-            </li>
-          )
-        })}
+                        Book
+                      </Button>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </li>
+            )
+          })}
       </ul>
     </li>
   )
