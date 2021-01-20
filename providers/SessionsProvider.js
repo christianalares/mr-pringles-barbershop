@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useRef, useCallback } from 'react'
+import { isToday, isFuture } from 'date-fns'
 import { db } from '../config/firebaseClient'
-// import useAuth from '../utils/hooks/useAuth'
 
 export const sessionsContext = createContext()
 
@@ -21,7 +21,12 @@ const SessionsProvider = ({ children }) => {
           })
         })
 
-        setSessions(tempSessions)
+        const tempSessionsFromTodayAndForward = tempSessions.filter(session => {
+          const date = new Date(session.day)
+          return isToday(date) || isFuture(date)
+        })
+
+        setSessions(tempSessionsFromTodayAndForward)
         setStatus('success')
       },
       err => {
